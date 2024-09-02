@@ -1,20 +1,43 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
+import HomeScreen from "./screens/HomeScreen";
+import MovieDetailsScreen from "./screens/MovieDetailsScreen";
+import FavoriteScreen from "./screens/FavoriteScreen";
+import { FavoritesProvider } from "./screens/FavoritesContext";
 
-export default function App() {
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
+function HomeDrawer() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Drawer.Navigator>
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="favorite" component={FavoriteScreen} />
+    </Drawer.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function MainStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="HomeDrawer"
+        component={HomeDrawer}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="MovieDetails" component={MovieDetailsScreen} />
+    </Stack.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <FavoritesProvider>
+      <NavigationContainer>
+        <MainStack />
+      </NavigationContainer>
+    </FavoritesProvider>
+  );
+}
